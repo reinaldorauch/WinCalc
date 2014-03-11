@@ -39,6 +39,7 @@ type
     procedure BtnInverteClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure BtnLimpaClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -52,6 +53,12 @@ var
 
   // Valor inicial da calculadora padrão
   InitVal: string = '0';
+
+  // Operador anterioo
+  OpAnt: char = ' ';
+
+  // Subtotal
+  SubTotal: Extended = 0;
 
 implementation
 
@@ -92,6 +99,9 @@ begin
   LbVisor.Caption := InitVal;
   OperPress := false;
   MmPapel.Text := '';
+  SubTotal := 0;
+  MmPapel.Lines.Clear();
+  OpAnt := ' ';
 end;
 
 procedure TFormCalc.BtnNumClick(Sender: TObject);
@@ -111,31 +121,32 @@ begin
 end;
 
 procedure TFormCalc.BtnOperadorClick(Sender: TObject);
-begin        
-    OperPress := true;
+begin
 
-    case TSpeedButton(Sender).Name of
-      'BtnSoma': begin  
-        {
-          Soma
-        }
+    if(OperPress OR (LbVisor.Caption = '')) then
+      beep
+    else
+      begin
+
+        MmPapel.Lines.Add(LbVisor.Caption + ' ' + OpAnt);
+
+        case OpAnt of
+          '+',' ': SubTotal := SubTotal + strToFloat(LbVisor.Caption);
+          '-': SubTotal := SubTotal - strToFloat(LbVisor.Caption);
+          '*': SubTotal := SubTotal * strToFloat(LbVisor.Caption);
+          '/': SubTotal := SubTotal / strToFloat(LbVisor.Caption);
+          else 
+            beep
+        end;
+
+        LbVisor.Caption := floatToStr(SubTotal);
+
+        OpAnt := TSpeedButton(Sender).Caption[1];
+
+        OperPress := true;
+
       end;
-      'BtnSub': begin
-        {
-          Subtrai
-        }
-      end;
-      'BtnMult': begin
-        {
-          Multiplica
-        }
-      end;
-      'BtnDiv': begin
-        {
-          Divide
-        }
-      end;
-    end;
+
 end;
 
 procedure TFormCalc.BtnPontoClick(Sender: TObject);
@@ -172,6 +183,32 @@ procedure TFormCalc.FormCreate(Sender: TObject);
 begin
   BtnPonto.Caption := FormatSettings.DecimalSeparator;
   LbVisor.Caption := InitVal;
+end;
+
+procedure TFormCalc.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+
+  case Key of
+    '0': BtnZeroClick(BtnZero);
+    '1': BtnNumClick(BtnUm);
+    '2': BtnNumClick(BtnDois);
+    '3': BtnNumClick(BtnTres);
+    '4': BtnNumClick(BtnQuatro);
+    '5': BtnNumClick(BtnCinco);
+    '6': BtnNumClick(BtnSeis);
+    '7': BtnNumClick(BtnSete);
+    '9': BtnNumClick(BtnNove);
+    '+': BtnOperadorClick(BtnSoma);
+    '-': BtnOperadorClick(BtnSub);
+    '*': BtnOperadorClick(BtnMult);
+    '/': BtnOperadorClick(BtnDiv);
+    #9 : BtnApagaClick(BtnApaga);
+    #13,'=': BtnOperadorClick(BtnIgual);
+    'c','C': BtnLimpaClick(BtnLimpa);
+    'i', 'I': BtnInverteClick(BtnInverte);
+    '.': BtnPontoClick(BtnPonto);
+  end;
+
 end;
 
 end.

@@ -14,6 +14,7 @@ object FormCalc: TFormCalc
   KeyPreview = True
   OldCreateOrder = False
   OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
   PixelsPerInch = 96
   TextHeight = 13
   object LbVisor: TLabel
@@ -39,9 +40,15 @@ object FormCalc: TFormCalc
     CharCase = ecUpperCase
     Ctl3D = True
     DoubleBuffered = False
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Palatino Linotype'
+    Font.Style = []
     ParentColor = True
     ParentCtl3D = False
     ParentDoubleBuffered = False
+    ParentFont = False
     ParentShowHint = False
     ReadOnly = True
     ScrollBars = ssVertical

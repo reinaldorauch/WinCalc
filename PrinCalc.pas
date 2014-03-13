@@ -52,7 +52,7 @@ var
   OperPress: Boolean;
 
   // Valor inicial da calculadora padrão
-  InitVal: string = '0';
+  InitVal: string = '';
 
   // Operador anterioo
   OpAnt: char = ' ';
@@ -68,6 +68,8 @@ procedure TFormCalc.BtnApagaClick(Sender: TObject);
 begin
   if((LbVisor.Caption = ('0' + FormatSettings.DecimalSeparator))
     OR ((Length(LbVisor.Caption) = 2) AND (LbVisor.Caption[1] = '-'))
+    OR ((Length(LbVisor.Caption) = 3) AND (LbVisor.Caption[1] = '-')
+      AND (LbVisor.Caption[2] = '0'))
     OR (Length(LbVisor.Caption) = 1)) then
     begin
       LbVisor.Caption := InitVal;

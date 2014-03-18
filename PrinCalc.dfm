@@ -34,8 +34,8 @@ object FormCalc: TFormCalc
   object LbMemory: TLabel
     Left = 17
     Top = 119
-    Width = 17
-    Height = 18
+    Width = 8
+    Height = 13
     Caption = 'M'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack

@@ -51,6 +51,7 @@ type
     procedure BtnMemSubClick(Sender: TObject);
     procedure BtnMemResClick(Sender: TObject);
     procedure BtnMemClearClick(Sender: TObject);
+    procedure ErrorClean();
   private
     { Private declarations }
   public
@@ -77,12 +78,17 @@ var
   // Memória da calculadora
   Memory: Extended = 0;
 
+  // Se um error foi lançado
+  Error: Boolean = false;
+
 implementation
 
 {$R *.dfm}
 
 procedure TFormCalc.BtnApagaClick(Sender: TObject);
 begin
+  ErrorClean();
+
   if(
     // Caso  '0,'
     (LbVisor.Caption = ('0' + FormatSettings.DecimalSeparator))
@@ -107,6 +113,7 @@ end;
 
 procedure TFormCalc.BtnIgualClick(Sender: TObject);
 begin
+  ErrorClean();
 
   BtnOperadorClick(Sender);
 
@@ -126,6 +133,8 @@ procedure TFormCalc.BtnInverteClick(Sender: TObject);
 var
   valor: double;
 begin
+  ErrorClean();
+
   if((Length(LbVisor.Caption) <= 13) AND (Length(LbVisor.Caption) > 0)) then
     begin
       valor := strToFloat(LbVisor.Caption);
@@ -139,16 +148,19 @@ end;
 
 procedure TFormCalc.BtnLimpaClick(Sender: TObject);
 begin
+  ErrorClean();
   LbVisor.Caption := InitVal;
   OperPress := false;
   MmPapel.Text := '';
   SubTotal := 0;
   MmPapel.Lines.Clear();
   OpAnt := ' ';
+  BtnMemClearClick(Sender);
 end;
 
 procedure TFormCalc.BtnMemAddClick(Sender: TObject);
 begin
+  ErrorClean();
 
   Memory := Memory + strtofloat(LbVisor.Caption);
 
@@ -158,6 +170,8 @@ end;
 
 procedure TFormCalc.BtnMemClearClick(Sender: TObject);
 begin
+  ErrorClean();
+
   Memory := 0;
 
   LbMemory.Visible := False;
@@ -165,6 +179,7 @@ end;
 
 procedure TFormCalc.BtnMemResClick(Sender: TObject);
 begin
+  ErrorClean();
 
   LbVisor.Caption := floatToStr(Memory);
 
@@ -172,6 +187,7 @@ end;
 
 procedure TFormCalc.BtnMemSubClick(Sender: TObject);
 begin
+  ErrorClean();
 
   Memory := Memory - strtoFloat(LbVisor.Caption);
 
@@ -181,6 +197,8 @@ end;
 
 procedure TFormCalc.BtnNumClick(Sender: TObject);
 begin
+  ErrorClean();
+
     if ((NOT OperPress) AND (NOT OperIgual)) then
         if (LbVisor.Caption = InitVal) then
             LbVisor.Caption := TSpeedButton(Sender).Caption
@@ -198,6 +216,7 @@ end;
 
 procedure TFormCalc.BtnOperadorClick(Sender: TObject);
 begin
+    ErrorClean();
 
     if(OperPress OR (LbVisor.Caption = '')) then
       beep
@@ -216,7 +235,15 @@ begin
           '+',' ': SubTotal := SubTotal + strToFloat(LbVisor.Caption);
           '-': SubTotal := SubTotal - strToFloat(LbVisor.Caption);
           '*': SubTotal := SubTotal * strToFloat(LbVisor.Caption);
-          '/': SubTotal := SubTotal / strToFloat(LbVisor.Caption);
+          '/': begin
+            if(LbVisor.Caption = '0') then
+              begin
+                beep;
+                LbVisor.Caption := 'Erro: Divisão por Zero';
+                Error := true;
+              end;
+            SubTotal := SubTotal / strToFloat(LbVisor.Caption);
+          end;
           else 
             beep
         end;
@@ -233,6 +260,8 @@ end;
 
 procedure TFormCalc.BtnPontoClick(Sender: TObject);
 begin
+  ErrorClean();
+
   if(Pos(FormatSettings.DecimalSeparator, LbVisor.Caption) <> 0) then
     begin
       beep;
@@ -248,6 +277,8 @@ end;
 
 procedure TFormCalc.BtnZeroClick(Sender: TObject);
 begin
+  ErrorClean();
+
   if(OperPress OR (LbVisor.Caption = InitVal)) then
     begin
       beep;
@@ -263,12 +294,16 @@ end;
 
 procedure TFormCalc.FormCreate(Sender: TObject);
 begin
+  ErrorClean();
+
   BtnPonto.Caption := FormatSettings.DecimalSeparator;
   LbVisor.Caption := InitVal;
 end;
 
 procedure TFormCalc.FormKeyPress(Sender: TObject; var Key: Char);
 begin
+
+  ErrorClean();
 
   case Key of
     '0': BtnZeroClick(BtnZero);
@@ -289,6 +324,17 @@ begin
     'c','C': BtnLimpaClick(BtnLimpa);
     'i', 'I': BtnInverteClick(BtnInverte);
     '.': BtnPontoClick(BtnPonto);
+  end;
+
+end;
+
+procedure TFormCalc.ErrorClean();
+begin
+
+  if(Error) then
+  begin
+    LbVisor.Caption := InitVal;
+    Error := false;
   end;
 
 end;

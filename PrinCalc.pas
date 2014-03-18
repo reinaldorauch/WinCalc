@@ -36,6 +36,7 @@ type
     BtnMemSub: TSpeedButton;
     BtnMemRes: TSpeedButton;
     BtnMemClear: TSpeedButton;
+    LbMemory: TLabel;
     procedure BtnNumClick(Sender: TObject);
     procedure BtnOperadorClick(Sender: TObject);
     procedure BtnZeroClick(Sender: TObject);
@@ -47,6 +48,9 @@ type
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure BtnIgualClick(Sender: TObject);
     procedure BtnMemAddClick(Sender: TObject);
+    procedure BtnMemSubClick(Sender: TObject);
+    procedure BtnMemResClick(Sender: TObject);
+    procedure BtnMemClearClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -145,8 +149,34 @@ end;
 
 procedure TFormCalc.BtnMemAddClick(Sender: TObject);
 begin
+
   Memory := Memory + strtofloat(LbVisor.Caption);
-  LbVisor.Caption := '';
+
+  LbMemory.Visible := True;
+
+end;
+
+procedure TFormCalc.BtnMemClearClick(Sender: TObject);
+begin
+  Memory := 0;
+
+  LbMemory.Visible := False;
+end;
+
+procedure TFormCalc.BtnMemResClick(Sender: TObject);
+begin
+
+  LbVisor.Caption := floatToStr(Memory);
+
+end;
+
+procedure TFormCalc.BtnMemSubClick(Sender: TObject);
+begin
+
+  Memory := Memory - strtoFloat(LbVisor.Caption);
+
+  LbMemory.Visible := True;
+
 end;
 
 procedure TFormCalc.BtnNumClick(Sender: TObject);

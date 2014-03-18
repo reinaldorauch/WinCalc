@@ -7,7 +7,7 @@ object FormCalc: TFormCalc
   ClientWidth = 252
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
-  Font.Color = clWindowText
+  Font.Color = clBlack
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
@@ -30,6 +30,20 @@ object FormCalc: TFormCalc
     ParentShowHint = False
     ShowHint = True
     Transparent = False
+  end
+  object LbMemory: TLabel
+    Left = 17
+    Top = 119
+    Width = 17
+    Height = 18
+    Caption = 'M'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    Visible = False
   end
   object MmPapel: TMemo
     Left = 8
@@ -228,7 +242,7 @@ object FormCalc: TFormCalc
     Height = 48
     TabOrder = 3
     object BtnMemAdd: TSpeedButton
-      Left = 9
+      Left = 8
       Top = 8
       Width = 50
       Height = 33
@@ -241,6 +255,7 @@ object FormCalc: TFormCalc
       Width = 50
       Height = 33
       Caption = 'M-'
+      OnClick = BtnMemSubClick
     end
     object BtnMemRes: TSpeedButton
       Left = 120
@@ -248,6 +263,7 @@ object FormCalc: TFormCalc
       Width = 50
       Height = 33
       Caption = 'MR'
+      OnClick = BtnMemResClick
     end
     object BtnMemClear: TSpeedButton
       Left = 176
@@ -255,6 +271,7 @@ object FormCalc: TFormCalc
       Width = 50
       Height = 33
       Caption = 'MC'
+      OnClick = BtnMemClearClick
     end
   end
 end

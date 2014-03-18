@@ -239,7 +239,7 @@ begin
     '*': BtnOperadorClick(BtnMult);
     '/': BtnOperadorClick(BtnDiv);
     #9 : BtnApagaClick(BtnApaga);
-    #13,'=': BtnOperadorClick(BtnIgual);
+    #13,'=': BtnIgualClick(BtnIgual);
     'c','C': BtnLimpaClick(BtnLimpa);
     'i', 'I': BtnInverteClick(BtnInverte);
     '.': BtnPontoClick(BtnPonto);

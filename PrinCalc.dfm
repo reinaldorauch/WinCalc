@@ -123,7 +123,7 @@ object FormCalc: TFormCalc
       Width = 33
       Height = 33
       Caption = '='
-      OnClick = BtnOperadorClick
+      OnClick = BtnIgualClick
     end
   end
   object Panel3: TPanel

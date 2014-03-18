@@ -40,6 +40,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure BtnLimpaClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BtnIgualClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -52,7 +53,7 @@ var
   OperPress: Boolean;
 
   // Valor inicial da calculadora padrão
-  InitVal: string = '0';
+  InitVal: string = '';
 
   // Operador anterioo
   OpAnt: char = ' ';
@@ -60,23 +61,51 @@ var
   // Subtotal
   SubTotal: Extended = 0;
 
+  // Se o igual foi pressionado
+  OperIgual: Boolean = false;
+
 implementation
 
 {$R *.dfm}
 
 procedure TFormCalc.BtnApagaClick(Sender: TObject);
 begin
-  if((LbVisor.Caption = ('0' + FormatSettings.DecimalSeparator))
+  if(
+    // Caso  '0,'
+    (LbVisor.Caption = ('0' + FormatSettings.DecimalSeparator))
+    // Caso '-N'
     OR ((Length(LbVisor.Caption) = 2) AND (LbVisor.Caption[1] = '-'))
-    OR (Length(LbVisor.Caption) = 1)) then
+    // Caso '-0,'
+    OR ((Length(LbVisor.Caption) = 3) AND (LbVisor.Caption[1] = '-')
+      AND (LbVisor.Caption[2] = '0'))
+    // É o último caractere do visor
+    OR (Length(LbVisor.Caption) = 1)
+  ) then
     begin
       LbVisor.Caption := InitVal;
       beep;
     end
-  else if(Length(LbVisor.Caption) > 0) then
+  // Se o vizor não estiver vazio
+  else if((LbVisor.Caption) <> '') then
     LbVisor.Caption := copy(LbVisor.Caption, 1, Length(LbVisor.Caption) - 1)
   else
     beep
+end;
+
+procedure TFormCalc.BtnIgualClick(Sender: TObject);
+begin
+
+  BtnOperadorClick(Sender);
+
+  OpAnt := ' ';
+
+  OperPress := false;
+
+  MmPapel.Lines.Append('-----------------------');
+  MmPapel.Lines.Append(LbVisor.Caption);
+
+  OperIgual := true;
+
 end;
 
 procedure TFormCalc.BtnInverteClick(Sender: TObject);
@@ -127,6 +156,13 @@ begin
       beep
     else
       begin
+
+        if(OperIgual) then
+          begin
+            SubTotal := 0;
+            MmPapel.Lines.Append('');
+            OperIgual := false;
+          end;
 
         MmPapel.Lines.Add(LbVisor.Caption + ' ' + OpAnt);
 
@@ -203,7 +239,7 @@ begin
     '*': BtnOperadorClick(BtnMult);
     '/': BtnOperadorClick(BtnDiv);
     #9 : BtnApagaClick(BtnApaga);
-    #13,'=': BtnOperadorClick(BtnIgual);
+    #13,'=': BtnIgualClick(BtnIgual);
     'c','C': BtnLimpaClick(BtnLimpa);
     'i', 'I': BtnInverteClick(BtnInverte);
     '.': BtnPontoClick(BtnPonto);

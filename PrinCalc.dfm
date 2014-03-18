@@ -3,7 +3,7 @@ object FormCalc: TFormCalc
   Top = 0
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Win Calc'
-  ClientHeight = 346
+  ClientHeight = 400
   ClientWidth = 252
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -57,7 +57,7 @@ object FormCalc: TFormCalc
   end
   object Panel1: TPanel
     Left = 143
-    Top = 169
+    Top = 223
     Width = 100
     Height = 169
     TabOrder = 1
@@ -128,7 +128,7 @@ object FormCalc: TFormCalc
   end
   object Panel3: TPanel
     Left = 8
-    Top = 169
+    Top = 223
     Width = 129
     Height = 169
     TabOrder = 2
@@ -219,6 +219,42 @@ object FormCalc: TFormCalc
       Height = 33
       Caption = '0'
       OnClick = BtnZeroClick
+    end
+  end
+  object Panel2: TPanel
+    Left = 8
+    Top = 169
+    Width = 236
+    Height = 48
+    TabOrder = 3
+    object BtnMemAdd: TSpeedButton
+      Left = 9
+      Top = 8
+      Width = 50
+      Height = 33
+      Caption = 'M+'
+      OnClick = BtnMemAddClick
+    end
+    object BtnMemSub: TSpeedButton
+      Left = 64
+      Top = 8
+      Width = 50
+      Height = 33
+      Caption = 'M-'
+    end
+    object BtnMemRes: TSpeedButton
+      Left = 120
+      Top = 8
+      Width = 50
+      Height = 33
+      Caption = 'MR'
+    end
+    object BtnMemClear: TSpeedButton
+      Left = 176
+      Top = 8
+      Width = 50
+      Height = 33
+      Caption = 'MC'
     end
   end
 end

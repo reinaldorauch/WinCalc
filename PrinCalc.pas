@@ -101,8 +101,9 @@ begin
 
   OperPress := false;
 
-  MmPapel.Lines.Append('-----------------------');
+  MmPapel.Lines.Append('---------------');
   MmPapel.Lines.Append(LbVisor.Caption);
+  MmPapel.Lines.Append('');
 
   OperIgual := true;
 
@@ -135,7 +136,7 @@ end;
 
 procedure TFormCalc.BtnNumClick(Sender: TObject);
 begin
-    if(NOT OperPress) then
+    if ((NOT OperPress) AND (NOT OperIgual)) then
         if (LbVisor.Caption = InitVal) then
             LbVisor.Caption := TSpeedButton(Sender).Caption
         else if(length(LbVisor.Caption) <= 13) then
@@ -146,6 +147,7 @@ begin
       begin
           LbVisor.Caption := TSpeedButton(Sender).Caption;
           OperPress := false;
+          OperIgual := false;
       end;
 end;
 
@@ -160,7 +162,6 @@ begin
         if(OperIgual) then
           begin
             SubTotal := 0;
-            MmPapel.Lines.Append('');
             OperIgual := false;
           end;
 

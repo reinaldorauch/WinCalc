@@ -31,6 +31,12 @@ type
     BtnSete: TSpeedButton;
     BtnPonto: TSpeedButton;
     BtnZero: TSpeedButton;
+    Panel2: TPanel;
+    BtnMemAdd: TSpeedButton;
+    BtnMemSub: TSpeedButton;
+    BtnMemRes: TSpeedButton;
+    BtnMemClear: TSpeedButton;
+    LbMemory: TLabel;
     procedure BtnNumClick(Sender: TObject);
     procedure BtnOperadorClick(Sender: TObject);
     procedure BtnZeroClick(Sender: TObject);
@@ -41,6 +47,10 @@ type
     procedure BtnLimpaClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure BtnIgualClick(Sender: TObject);
+    procedure BtnMemAddClick(Sender: TObject);
+    procedure BtnMemSubClick(Sender: TObject);
+    procedure BtnMemResClick(Sender: TObject);
+    procedure BtnMemClearClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -63,6 +73,9 @@ var
 
   // Se o igual foi pressionado
   OperIgual: Boolean = false;
+
+  // Memória da calculadora
+  Memory: Extended = 0;
 
 implementation
 
@@ -101,8 +114,9 @@ begin
 
   OperPress := false;
 
-  MmPapel.Lines.Append('-----------------------');
+  MmPapel.Lines.Append('---------------');
   MmPapel.Lines.Append(LbVisor.Caption);
+  MmPapel.Lines.Append('');
 
   OperIgual := true;
 
@@ -133,9 +147,41 @@ begin
   OpAnt := ' ';
 end;
 
+procedure TFormCalc.BtnMemAddClick(Sender: TObject);
+begin
+
+  Memory := Memory + strtofloat(LbVisor.Caption);
+
+  LbMemory.Visible := True;
+
+end;
+
+procedure TFormCalc.BtnMemClearClick(Sender: TObject);
+begin
+  Memory := 0;
+
+  LbMemory.Visible := False;
+end;
+
+procedure TFormCalc.BtnMemResClick(Sender: TObject);
+begin
+
+  LbVisor.Caption := floatToStr(Memory);
+
+end;
+
+procedure TFormCalc.BtnMemSubClick(Sender: TObject);
+begin
+
+  Memory := Memory - strtoFloat(LbVisor.Caption);
+
+  LbMemory.Visible := True;
+
+end;
+
 procedure TFormCalc.BtnNumClick(Sender: TObject);
 begin
-    if(NOT OperPress) then
+    if ((NOT OperPress) AND (NOT OperIgual)) then
         if (LbVisor.Caption = InitVal) then
             LbVisor.Caption := TSpeedButton(Sender).Caption
         else if(length(LbVisor.Caption) <= 13) then
@@ -146,6 +192,7 @@ begin
       begin
           LbVisor.Caption := TSpeedButton(Sender).Caption;
           OperPress := false;
+          OperIgual := false;
       end;
 end;
 
@@ -160,7 +207,6 @@ begin
         if(OperIgual) then
           begin
             SubTotal := 0;
-            MmPapel.Lines.Append('');
             OperIgual := false;
           end;
 

@@ -31,6 +31,11 @@ type
     BtnSete: TSpeedButton;
     BtnPonto: TSpeedButton;
     BtnZero: TSpeedButton;
+    Panel2: TPanel;
+    BtnMemAdd: TSpeedButton;
+    BtnMemSub: TSpeedButton;
+    BtnMemRes: TSpeedButton;
+    BtnMemClear: TSpeedButton;
     procedure BtnNumClick(Sender: TObject);
     procedure BtnOperadorClick(Sender: TObject);
     procedure BtnZeroClick(Sender: TObject);
@@ -41,6 +46,7 @@ type
     procedure BtnLimpaClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
     procedure BtnIgualClick(Sender: TObject);
+    procedure BtnMemAddClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -63,6 +69,9 @@ var
 
   // Se o igual foi pressionado
   OperIgual: Boolean = false;
+
+  // Memória da calculadora
+  Memory: Extended = 0;
 
 implementation
 
@@ -132,6 +141,12 @@ begin
   SubTotal := 0;
   MmPapel.Lines.Clear();
   OpAnt := ' ';
+end;
+
+procedure TFormCalc.BtnMemAddClick(Sender: TObject);
+begin
+  Memory := Memory + strtofloat(LbVisor.Caption);
+  LbVisor.Caption := '';
 end;
 
 procedure TFormCalc.BtnNumClick(Sender: TObject);

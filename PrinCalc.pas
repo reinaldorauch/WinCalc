@@ -52,7 +52,7 @@ var
   OperPress: Boolean;
 
   // Valor inicial da calculadora padrão
-  InitVal: string = '0';
+  InitVal: string = '';
 
   // Operador anterioo
   OpAnt: char = ' ';
@@ -66,14 +66,23 @@ implementation
 
 procedure TFormCalc.BtnApagaClick(Sender: TObject);
 begin
-  if((LbVisor.Caption = ('0' + FormatSettings.DecimalSeparator))
+  if(
+    // Caso  '0,'
+    (LbVisor.Caption = ('0' + FormatSettings.DecimalSeparator))
+    // Caso '-N'
     OR ((Length(LbVisor.Caption) = 2) AND (LbVisor.Caption[1] = '-'))
-    OR (Length(LbVisor.Caption) = 1)) then
+    // Caso '-0,'
+    OR ((Length(LbVisor.Caption) = 3) AND (LbVisor.Caption[1] = '-')
+      AND (LbVisor.Caption[2] = '0'))
+    // É o último caractere do visor
+    OR (Length(LbVisor.Caption) = 1)
+  ) then
     begin
       LbVisor.Caption := InitVal;
       beep;
     end
-  else if(Length(LbVisor.Caption) > 0) then
+  // Se o vizor não estiver vazio
+  else if((LbVisor.Caption) <> '') then
     LbVisor.Caption := copy(LbVisor.Caption, 1, Length(LbVisor.Caption) - 1)
   else
     beep

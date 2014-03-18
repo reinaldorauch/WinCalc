@@ -40,6 +40,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure BtnLimpaClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure BtnIgualClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -59,6 +60,9 @@ var
 
   // Subtotal
   SubTotal: Extended = 0;
+
+  // Se o igual foi pressionado
+  OperIgual: Boolean = false;
 
 implementation
 
@@ -86,6 +90,22 @@ begin
     LbVisor.Caption := copy(LbVisor.Caption, 1, Length(LbVisor.Caption) - 1)
   else
     beep
+end;
+
+procedure TFormCalc.BtnIgualClick(Sender: TObject);
+begin
+
+  BtnOperadorClick(Sender);
+
+  OpAnt := ' ';
+
+  OperPress := false;
+
+  MmPapel.Lines.Append('-----------------------');
+  MmPapel.Lines.Append(LbVisor.Caption);
+
+  OperIgual := true;
+
 end;
 
 procedure TFormCalc.BtnInverteClick(Sender: TObject);
@@ -136,6 +156,13 @@ begin
       beep
     else
       begin
+
+        if(OperIgual) then
+          begin
+            SubTotal := 0;
+            MmPapel.Lines.Append('');
+            OperIgual := false;
+          end;
 
         MmPapel.Lines.Add(LbVisor.Caption + ' ' + OpAnt);
 
